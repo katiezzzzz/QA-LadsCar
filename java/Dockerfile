@@ -1,21 +1,18 @@
-# FROM ubuntu:22.04
-# RUN apt update
-# RUN apt install -y git
-# RUN apt install -y default -jdk
-
 # Eclipse Temurin, one of the most popular official images with a build-worthy JDK
-FROM eclipse-temurin:17-jdk-jammy
+FROM maven:latest
 
 # change into a folder called /app
 WORKDIR /app
 
-# # using maven for project managementt
-# COPY .mvn/ .mvn
-# COPY mvnw pom.xml ./
-# RUN ./mvnw dependency:resolve
+# using maven for project managementt
+COPY . .
 
-# download the project dependencies
-RUN npm install
+RUN mvn clean package -Dmaven.test.skip
 
-# package up the react project in the /app directory
-RUN npm run build
+# second stage
+FROM ubuntu/jre:17-22.04_edge
+
+#COPY ./app/target/cardatabase-0.0.1-SNAPSHOT.jar .
+
+CMD [ "-jar", "target/cardatabase-0.0.1-SNAPSHOT.jar" ]
+
