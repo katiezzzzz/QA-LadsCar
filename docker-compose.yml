@@ -1,0 +1,15 @@
+version: "3.8"
+services:
+  java:
+    image: ailismc/qa-theladscar-java
+    build: ./java
+    ports:
+      - target: 8080
+        published: 8080
+  react:
+    image: ailismc/qa-theladscar-react
+    build:
+      context: ./react
+    ports:
+      - target: 80
+        published: 80
